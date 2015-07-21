@@ -1,4 +1,4 @@
-<?php namespace role\system;
+<?php namespace fisher\system;
 
 class RoleSystem
 {
@@ -29,34 +29,29 @@ class RoleSystem
     /**
      * Конструктор
      *
-     * @param string $host - имя хоста
-     * @param string $db - название БД
+     * @param string $connectionString - строка PDO для коннекта
      * @param string $user - пользователь БД
      * @param string $password - пароль пользователя БД
-     * @param string $charset - кодировка БД
      */
-    protected function __construct($host, $db, $user, $password, $charset)
+    protected function __construct($connectionString, $user, $password)
     {
-        $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-        $this->pdo = new \PDO($dsn, $user, $password);
+        $this->pdo = new \PDO($connectionString, $user, $password);
     }
 
     /**
      * Функция инициализации объекта
      *
-     * @param string $host - имя хоста
-     * @param string $db - название БД
+     * @param string $connectionString - строка PDO для коннекта
      * @param string $user - пользователь БД
      * @param string $password - пароль пользователя БД
-     * @param string $charset - кодировка БД
      *
      * @return RoleSystem
      */
-    private static function getInstance($host, $db, $user, $password, $charset)
+    public static function getInstance($connectionString, $user, $password)
     {
         if (is_null(self::$instance))
         {
-            self::$instance = new self($host, $db, $user, $password, $charset);
+            self::$instance = new self($connectionString, $user, $password);
         }
 
         return self::$instance;
