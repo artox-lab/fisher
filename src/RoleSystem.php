@@ -1,4 +1,4 @@
-<?php namespace fisher\system;
+<?php namespace Fisher;
 
 class RoleSystem
 {
