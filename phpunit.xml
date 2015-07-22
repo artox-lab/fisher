@@ -27,9 +27,9 @@
         <var name="DB_ADAPTER" value="mysql" />
         <var name="DB_HOST" value="localhost" />
         <var name="DB_PORT" value="3306" />
-        <var name="DB_NAME" value="yankovets_test" />
-        <var name="DB_USERNAME" value="yankovets" />
-        <var name="DB_PASSWORD" value="5FZg10KRm4" />
+        <var name="DB_NAME" value="test" />
+        <var name="DB_USERNAME" value="root" />
+        <var name="DB_PASSWORD" value="1234" />
         <var name="DB_CHARSET" value="utf8" />
         <var name="DB_COLLATION" value="utf8" />
         <var name="DB_TABLE_PREFIX" value="" />

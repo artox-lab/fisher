@@ -48,7 +48,7 @@ class RoleSystem
     /**
      * Функция инициализации объекта
      *
-     * @param string $connectionString - строка PDO для коннекта
+     * @param string $connectionString - строка PDO для коннекта к БД
      * @param string $user - пользователь БД
      * @param string $password - пароль пользователя БД
      *
@@ -130,7 +130,7 @@ class RoleSystem
     /**
      * Возвращает правила связанные с пользователем
      *
-     * @param mixed $userId Id пользователя
+     * @param integer $userId Id пользователя
      * @return array Массив ролей
      */
     public function getUserRoles($userId)
