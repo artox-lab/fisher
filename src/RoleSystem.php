@@ -1,5 +1,11 @@
 <?php namespace Fisher;
 
+/**
+ * Класс для работы с системой ролей
+ *
+ * Class RoleSystem
+ * @package Fisher
+ */
 class RoleSystem
 {
     private static $instance;
@@ -8,20 +14,20 @@ class RoleSystem
     const TYPE_DENY = 'deny';
     const TYPE_ALLOW = 'allow';
 
-    /** @const string название таблицы, хранящей роли */
-    const ROLE_TABLE = 're_account_role';
+    /** @var string название таблицы, хранящей роли */
+    public $roleTable = 're_account_role';
 
-    /** @const string название таблицы, хранящей правила авторизации */
-    const RULE_TABLE = 're_account_rule';
+    /** @var string название таблицы, хранящей правила авторизации */
+    public $ruleTable = 're_account_rule';
 
-    /** @const string название таблицы, хранящей привязку правил авторизации к ролям */
-    const ROLES_RULES_TABLE = 're_account_roles_rules';
+    /** @var string название таблицы, хранящей привязку правил авторизации к ролям */
+    public $rolesRulesTable = 're_account_roles_rules';
 
-    /** @const string название таблицы, хранящей пользователей */
-    const USER_TABLE = 're_account_user';
+    /** @var string название таблицы, хранящей пользователей */
+    public $userTable = 're_account_user';
 
-    /** @const string название таблицы, хранящей привязку пользователя к ролям */
-    const USERS_ROLES_TABLE = 're_account_users_roles';
+    /** @var string название таблицы, хранящей привязку пользователя к ролям */
+    public $usersRolesTable = 're_account_users_roles';
 
     /** @const string разделитель */
     const NAME_DELIMITER = '/';
@@ -36,6 +42,7 @@ class RoleSystem
     protected function __construct($connectionString, $user, $password)
     {
         $this->pdo = new \PDO($connectionString, $user, $password);
+        $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
     }
 
     /**
@@ -60,19 +67,15 @@ class RoleSystem
     /**
      * Проверка прав пользователя на доступность экшэна
      *
-     * @param string $ruleName - название роли
      * @param number $userId - id пользователя
-     * @param string $moduleName - название модуля
-     * @param string $controllerName - название контроллера
+     * @param string $fullRoleName - полное название роли
+
      *
      * @return bool
      */
-    public function checkAccess($ruleName, $userId, $moduleName, $controllerName)
+    public function checkAccess($userId, $fullRoleName)
     {
         $check = false;
-
-        $fullItemName = trim(($ruleName[0] != '/') ? $this->createOperationName($ruleName, $moduleName, $controllerName) : substr($ruleName, 1), '/');
-        $fullItemName = mb_strtolower($fullItemName);
 
         // Получаем список ролей
         $roles = $this->getUserRoles($userId);
@@ -94,7 +97,7 @@ class RoleSystem
             FROM
                 `' . $this->rolesRulesTable . '` as `rr`
             LEFT JOIN
-                `' . $this->ruleTable . '` `r` as `r`.`id` = `rr`.`rule_id`
+                `' . $this->ruleTable . '` as `r` on `r`.`id` = `rr`.`rule_id`
             WHERE
                 LOWER(`r`.`key`) = :key
                 AND `rr`.`role_id` in (' . implode(',', $paramsQuery) . ')
@@ -105,13 +108,15 @@ class RoleSystem
 
         foreach ($paramsQuery as $key => $param)
         {
-            $select->bindParam($param, intval($rolesIds[$key]), \PDO::PARAM_INT);
+            $select->bindParam($param, (intval($rolesIds[$key])), \PDO::PARAM_INT);
         }
 
-        $select->bindParam(':type', self::TYPE_DENY, \PDO::PARAM_STR);
-        $select->bindParam(':key', $fullItemName, \PDO::PARAM_STR);
+        $deny = self::TYPE_DENY;
+        $select->bindParam(':type', $deny, \PDO::PARAM_STR);
+        $select->bindParam(':key', $fullRoleName, \PDO::PARAM_STR);
+        $select->execute();
 
-        $assignment = $select->fetch(\PDO::FETCH_NUM);
+        $assignment = $select->fetch(\PDO::FETCH_ASSOC);
 
         if (!empty($assignment) && $assignment['type'] == self::TYPE_ALLOW)
         {
@@ -120,23 +125,6 @@ class RoleSystem
 
         return $check;
     }
-
-    #region Вспомогательные функции
-    /**
-     * Формирование полного названия операции
-     *
-     * @param string $itemName название проверяемого экшэна
-     * @param string $moduleName название модуля
-     * @param string $controllerName название контроллера
-     *
-     * @return string полное название проверяемого экшэна
-     */
-    public function createOperationName($itemName, $moduleName, $controllerName)
-    {
-        // Выводим название = название_модуля+разделитель+название_контроллера+разделитель+название_операции
-        return sprintf('%1$s%4$s%2$s%4$s%3$s', $moduleName, $controllerName, $itemName, self::NAME_DELIMITER);
-    }
-    #endregion
 
     #region Функции, которые работают с информацией о ролях и доступе пользователя
     /**
@@ -162,9 +150,10 @@ class RoleSystem
 
         $select = $this->pdo->prepare($sql);
 
-        $select->bindParam(':userId', $userId, \PDO::PARAM_INT);
+        $select->bindParam(':userId', (intval($userId)), \PDO::PARAM_INT);
+        $select->execute();
 
-        $roles = $select->fetchAll(\PDO::FETCH_NUM);
+        $roles = $select->fetchAll(\PDO::FETCH_ASSOC);
 
         $rolesWithParentRole = array_filter($roles, function ($x)
         {
@@ -192,10 +181,10 @@ class RoleSystem
 
         foreach ($paramsQuery as $key => $param)
         {
-            $select->bindParam($param, intval($rolesWithParentRoleIds[$key]), \PDO::PARAM_INT);
+            $select->bindParam($param, (intval($rolesWithParentRoleIds[$key])), \PDO::PARAM_INT);
         }
-
-        $parentRoles = $select->fetchAll(\PDO::FETCH_NUM);
+        $select->execute();
+        $parentRoles = $select->fetchAll(\PDO::FETCH_ASSOC);
 
         return array_merge($roles, $parentRoles);
     }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit backupGlobals="false"
          backupStaticAttributes="false"
-         bootstrap="vendor/autoload.php"
+         bootstrap="tests/bootstrap.php"
          colors="true"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
@@ -10,8 +10,8 @@
          stopOnFailure="false"
          syntaxCheck="false">
     <testsuites>
-        <testsuite name="Client for classifier Test Suite">
-            <directory suffix=".php">./tests/roleSystem/</directory>
+        <testsuite name="Role system Database Test Suite">
+            <directory>./tests/roleSystem</directory>
         </testsuite>
     </testsuites>
     <filter>
@@ -23,16 +23,17 @@
             </exclude>
         </whitelist>
     </filter>
+
     <php>
         <var name="DB_ADAPTER" value="mysql" />
         <var name="DB_HOST" value="localhost" />
         <var name="DB_PORT" value="3306" />
-        <var name="DB_NAME" value="yankovets_test" />
-        <var name="DB_USERNAME" value="yankovets" />
-        <var name="DB_PASSWORD" value="5FZg10KRm4" />
+        <var name="DB_NAME" value="fisherdb_test" />
+        <var name="DB_USERNAME" value="teamcity" />
+        <var name="DB_PASSWORD" value="teamcitypasswd" />
         <var name="DB_CHARSET" value="utf8" />
         <var name="DB_COLLATION" value="utf8" />
-        <var name="DB_TABLE_PREFIX" value="" />
+        <var name="DB_TABLE_PREFIX" value="fdb_" />
         <var name="DB_UNIX_SOCKET" value="" />
     </php>
 </phpunit>
