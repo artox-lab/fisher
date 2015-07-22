@@ -15,7 +15,7 @@ Run ```composer update```
 ## Setup DB structure
 You can install this DB structure using the following command:
 ```bash
-php src/Command/init
+php init.php
 ```
 and enter data name database, username for database and password for username.
 
