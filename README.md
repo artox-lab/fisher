@@ -35,6 +35,9 @@ $password = '123';
 // Initial class role system
  $roleSystem = \Fisher\RoleSystem::getInstance('mysql:host=localhost;charset=utf8;dbname=fisher_database', $username, $password);
 
+// User id for db table `re_account_user`
+$userId = 95;
+
 // check rule for user
 echo $roleSystem->checkAccess($userId, 'admin/catalog/products');
 
