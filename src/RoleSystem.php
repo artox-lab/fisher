@@ -86,7 +86,7 @@ class RoleSystem
         // Получаем параметры для запроса
         $paramsQuery = array_map(function($item)
         {
-            return ':param_' . $item;
+            return ':param_' . intval($item);
         }, $rolesIds);
 
         // Проверяем, есть ли связь у какой-либо из ролей с запрашиваемым итемом
@@ -165,7 +165,7 @@ class RoleSystem
         // Получаем параметры для запроса
         $paramsQuery = array_map(function($item)
         {
-            return ':param_' . $item;
+            return ':param_' . intval($item);
         }, $rolesWithParentRoleIds);
 
         $sql = '
