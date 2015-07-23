@@ -12,6 +12,6 @@ echo 'Username database:' . $username . PHP_EOL;
 echo 'Password username:' . PHP_EOL;
 $password = trim(fgets(STDIN));
 echo 'Password username:' . $password . PHP_EOL;
-exec("mysql -u{$database} -p{$password} -f {$database} < ". __DIR__ . "/../../data/schema.sql");
+exec("mysql -u{$database} -p{$password} -f {$database} < ". __DIR__ . "/data/schema.sql");
 echo 'End export database!' . PHP_EOL;
 
