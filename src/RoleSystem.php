@@ -162,29 +162,34 @@ class RoleSystem
 
         $rolesWithParentRoleIds = array_column($rolesWithParentRole, 'parent_role_id');
 
-        // Получаем параметры для запроса
-        $paramsQuery = array_map(function($item)
+        $parentRoles = [];
+
+        if ($rolesWithParentRoleIds)
         {
-            return ':param_' . intval($item);
-        }, $rolesWithParentRoleIds);
+            // Получаем параметры для запроса
+            $paramsQuery = array_map(function($item)
+            {
+                return ':param_' . $item;
+            }, $rolesWithParentRoleIds);
 
-        $sql = '
-            SELECT
-                *
-            FROM
-              `' . $this->roleTable . '`
-            WHERE
-              `id` in (' . implode(',', $paramsQuery) . ')
-        ';
+            $sql = '
+                SELECT
+                    *
+                FROM
+                  `' . $this->roleTable . '`
+                WHERE
+                  `id` in (' . implode(',', $paramsQuery) . ')
+            ';
 
-        $select = $this->pdo->prepare($sql);
+            $select = $this->pdo->prepare($sql);
 
-        foreach ($paramsQuery as $key => $param)
-        {
-            $select->bindParam($param, (intval($rolesWithParentRoleIds[$key])), \PDO::PARAM_INT);
+            foreach ($paramsQuery as $key => $param)
+            {
+                $select->bindParam($param, (intval($rolesWithParentRoleIds[$key])), \PDO::PARAM_INT);
+            }
+            $select->execute();
+            $parentRoles = $select->fetchAll(\PDO::FETCH_ASSOC);
         }
-        $select->execute();
-        $parentRoles = $select->fetchAll(\PDO::FETCH_ASSOC);
 
         return array_merge($roles, $parentRoles);
     }
