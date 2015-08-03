@@ -87,7 +87,6 @@ class RoleSystem
 
         if (!empty($rolesIds))
         {
-
             // Получаем параметры для запроса
             $paramsQuery = array_map(function ($item)
             {
