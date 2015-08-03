@@ -83,15 +83,20 @@ class RoleSystem
         // Получаем id ролей
         $rolesIds =  array_column($roles, 'id');
 
-        // Получаем параметры для запроса
-        $paramsQuery = array_map(function($item)
-        {
-            return ':param_' . intval($item);
-        }, $rolesIds);
+        $assignment = [];
 
-        // Проверяем, есть ли связь у какой-либо из ролей с запрашиваемым итемом
-        // Сортируем по type, чтобы легче было проверять
-        $sql = '
+        if (!empty($rolesIds))
+        {
+
+            // Получаем параметры для запроса
+            $paramsQuery = array_map(function ($item)
+            {
+                return ':param_' . intval($item);
+            }, $rolesIds);
+
+            // Проверяем, есть ли связь у какой-либо из ролей с запрашиваемым итемом
+            // Сортируем по type, чтобы легче было проверять
+            $sql = '
             SELECT
                 `type`
             FROM
@@ -104,19 +109,20 @@ class RoleSystem
             ORDER BY (`rr`.`type` = :type) DESC
         ';
 
-        $select = $this->pdo->prepare($sql);
+            $select = $this->pdo->prepare($sql);
 
-        foreach ($paramsQuery as $key => $param)
-        {
-            $select->bindParam($param, (intval($rolesIds[$key])), \PDO::PARAM_INT);
+            foreach ($paramsQuery as $key => $param)
+            {
+                $select->bindParam($param, (intval($rolesIds[$key])), \PDO::PARAM_INT);
+            }
+
+            $deny = self::TYPE_DENY;
+            $select->bindParam(':type', $deny, \PDO::PARAM_STR);
+            $select->bindParam(':key', $fullRoleName, \PDO::PARAM_STR);
+            $select->execute();
+
+            $assignment = $select->fetch(\PDO::FETCH_ASSOC);
         }
-
-        $deny = self::TYPE_DENY;
-        $select->bindParam(':type', $deny, \PDO::PARAM_STR);
-        $select->bindParam(':key', $fullRoleName, \PDO::PARAM_STR);
-        $select->execute();
-
-        $assignment = $select->fetch(\PDO::FETCH_ASSOC);
 
         if (!empty($assignment) && $assignment['type'] == self::TYPE_ALLOW)
         {
