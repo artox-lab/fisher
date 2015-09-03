@@ -29,6 +29,11 @@ class RoleSystem
     /** @var string название таблицы, хранящей привязку пользователя к ролям */
     public $usersRolesTable = 're_account_users_roles';
 
+    /** @var string название таблицы, хранящей привязку роли к заведениям */
+    public $rolesPlacesTable = 're_account_roles_places';
+
+    const RULE_ACCESS_TO_ALL_PLACES = '/admin/cmscatalog/places/viewAllPlaces';
+
     /** @const string разделитель */
     const NAME_DELIMITER = '/';
 
@@ -131,7 +136,6 @@ class RoleSystem
         return $check;
     }
 
-    #region Функции, которые работают с информацией о ролях и доступе пользователя
     /**
      * Возвращает правила связанные с пользователем
      *
@@ -198,5 +202,54 @@ class RoleSystem
 
         return array_merge($roles, $parentRoles);
     }
-    #endregion
+
+    public function checkAccessToAllPlaces($userId)
+    {
+        return $this->checkAccess($userId, RoleSystem::RULE_ACCESS_TO_ALL_PLACES);
+    }
+
+    /**
+     * Функция проверяем, имеет ли пользователь доступ к просмотру списка заведений
+     *
+     * Сначала проверяется, имеет ли пользователь доступ к редактированию всех заведений, если нет,
+     * то проверяются права на редактирования каждого заведения в отдельности. Если хоть какое-то
+     * заведение не разрешено редактировать, то чек не прошел и возвращается false.
+     *
+     * @param int $userId ID пользователя
+     * @param int[] $placesIds Айдишки заведений
+     *
+     * @return bool
+     */
+    public function checkAccessToPlaces($userId, $placesIds)
+    {
+        if ($this->checkAccessToAllPlaces($userId))
+        {
+            return true;
+        }
+
+        // Пробегаемся по айдишкам заведений и чекаем права для каждого
+        foreach ($placesIds as $placeId)
+        {
+            $sql = "SELECT 1
+                    FROM `$this->rolesPlacesTable` rp
+                    LEFT JOIN `$this->usersRolesTable` ur
+                    ON ur.role_id = rp.role_id
+                    WHERE ur.user_id = :userId
+                    AND rp.place_id = :placeId";
+
+            $select = $this->pdo->prepare($sql);
+            $select->bindParam(':userId', (intval($userId)), \PDO::PARAM_INT);
+            $select->bindParam(':placeId', (intval($placeId)), \PDO::PARAM_INT);
+            $select->execute();
+
+            $result = $select->fetchColumn();
+
+            if (is_null($result))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
