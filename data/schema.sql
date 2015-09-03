@@ -108,7 +108,7 @@ CREATE TABLE `re_place` (
   KEY `is_deleted` (`is_deleted`),
   KEY `status` (`status`),
   KEY `type` (`type`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `re_account_roles_places`;
 CREATE TABLE `re_account_roles_places` (
@@ -121,4 +121,4 @@ CREATE TABLE `re_account_roles_places` (
   KEY `Place` (`place_id`),
   CONSTRAINT `RolesPlaces_Place` FOREIGN KEY (`place_id`) REFERENCES `re_place` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `RolesPlaces_Role` FOREIGN KEY (`role_id`) REFERENCES `re_account_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
