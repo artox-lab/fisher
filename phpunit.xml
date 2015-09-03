@@ -20,6 +20,7 @@
             <exclude>
                 <directory>./vendor</directory>
                 <directory>./tests</directory>
+                <directory>./src/Tests</directory>
             </exclude>
         </whitelist>
     </filter>

@@ -6,7 +6,7 @@ if (!file_exists(__DIR__ . '/../vendor/autoload.php'))
 }
 require_once(__DIR__ . '/../vendor/autoload.php');
 
-if (!file_exists(__DIR__ . '/../data/schema.sql'))
+if (!file_exists(__DIR__ . '/data/data.sql'))
 {
     throw new \Exception('Тестовая структура БД не найдена.');
 }
@@ -26,11 +26,8 @@ EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 SET FOREIGN_KEY_CHECKS = 1;";
 EOF;
-$importDbSchemaCommand = "mysql -u{$GLOBALS['DB_USERNAME']} -p{$GLOBALS['DB_PASSWORD']}  {$GLOBALS['DB_NAME']} < " . __DIR__ . '/../data/schema.sql';
 $importDbDataSchemaCommand = "mysql -u{$GLOBALS['DB_USERNAME']} -p{$GLOBALS['DB_PASSWORD']}  {$GLOBALS['DB_NAME']} < " . __DIR__ . '/data/data.sql';
 echo 'Чистим БД для тестов...' . "\n";
 echo exec($deleteTablesCommand);
-echo 'Импортируем схему для тестов...' . "\n";
-echo exec($importDbSchemaCommand);
 echo 'Импортируем данные схемы для тестов...' . "\n";
 echo exec($importDbDataSchemaCommand);
