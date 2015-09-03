@@ -244,7 +244,7 @@ class RoleSystem
 
             $result = $select->fetchColumn();
 
-            if (is_null($result))
+            if (!$result)
             {
                 return false;
             }
