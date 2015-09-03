@@ -28,4 +28,10 @@ class RoleSystemTest extends DbTestCase
         $this->assertTrue($instance->checkAccessToPlaces(95, [1,2]));
         $this->assertFalse($instance->checkAccessToPlaces(95, [3]));
     }
+
+    public function testCheckAccessToAllPlaces()
+    {
+        $instance = \Fisher\RoleSystem::getInstance('mysql:host=' . $this->config['host'] . ';charset=' .  $this->config['charset'] . ';dbname=' . $this->config['database'], $this->config['username'], $this->config['password']);
+        $this->assertTrue($instance->checkAccessToAllPlaces(96));
+    }
 }

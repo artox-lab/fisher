@@ -32,7 +32,7 @@ class RoleSystem
     /** @var string название таблицы, хранящей привязку роли к заведениям */
     public $rolesPlacesTable = 're_account_roles_places';
 
-    const RULE_ACCESS_TO_ALL_PLACES = '/admin/cmscatalog/places/viewAllPlaces';
+    const RULE_ACCESS_TO_ALL_PLACES = 'admin/cmscatalog/places/viewallplaces';
 
     /** @const string разделитель */
     const NAME_DELIMITER = '/';

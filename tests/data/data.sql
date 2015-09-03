@@ -124,13 +124,16 @@ CREATE TABLE `re_account_roles_places` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 INSERT INTO `re_account_user` VALUES (95, 'personal', 'active', 'Join', 'Smitt', '', 'j.smitt@artox.com', '4a81edfb54dd8e97e8aad8cb12838ad33fac259f', '3dl0kz4i', '', '', NULL, NULL, NULL);
+INSERT INTO `re_account_user` VALUES (96, 'personal', 'active', 'Join2', 'Smitt2', '', 'j.smitt2@artox.com', '4a81edfb54dd8e97e8aad8cb12838ad33fac259e', '3dl0kz4a', '', '', NULL, NULL, NULL);
 
 INSERT INTO `re_account_role` VALUES (13, 'Developer', 'user', null, '0', '0', 'places');
 INSERT INTO `re_account_role` VALUES (17943, 'Developer: Join Smitt', 'user', 13, '0', '0', 'places');
+INSERT INTO `re_account_role` VALUES (17944, 'Developer: Join2 Smitt2', 'user', 13, '0', '0', 'places');
 
 INSERT INTO `re_account_rule` VALUES (1, 'Каталог', 'admin/catalog', null, 8);
 INSERT INTO `re_account_rule` VALUES (2, 'Фильтры', 'admin/catalog/productFilters', 1, 8);
 INSERT INTO `re_account_rule` VALUES (3, 'Отзывы', 'admin/catalog/reviews', 1, 8);
+INSERT INTO `re_account_rule` VALUES (4, 'Доступны все заведения', 'admin/cmscatalog/places/viewallplaces', 1, 12);
 INSERT INTO `re_account_rule` VALUES (273, 'Изменение значений фильтра типа \'Инпут\'', 'admin/catalog/productFilters/inputvalues', 2, 8);
 INSERT INTO `re_account_rule` VALUES (283, 'Изменение значений фильтра типа \'Инпут с измерением\'', 'admin/catalog/productFilters/rangevalues', 1, 9);
 INSERT INTO `re_account_rule` VALUES (363, 'Объединение фильтров', 'admin/catalog/productFilters/merge', 2, 10);
@@ -147,9 +150,12 @@ INSERT INTO `re_account_roles_rules` VALUES (78273, 17943, 373, 'allow');
 INSERT INTO `re_account_roles_rules` VALUES (84583, 17943, 393, 'deny');
 INSERT INTO `re_account_roles_rules` VALUES (84593, 17943, 403, 'deny');
 INSERT INTO `re_account_roles_rules` VALUES (84603, 17943, 413, 'deny');
+INSERT INTO `re_account_roles_rules` VALUES (84604, 17944, 4, 'allow');
 
 INSERT INTO `re_account_users_roles` VALUES (17263, 95, 17943);
 INSERT INTO `re_account_users_roles` VALUES (17264, 95, 13);
+INSERT INTO `re_account_users_roles` VALUES (17265, 96, 17944);
+INSERT INTO `re_account_users_roles` VALUES (17266, 96, 13);
 
 INSERT INTO `re_place` VALUES (1, '0', '1', 1441270596, 'default');
 INSERT INTO `re_place` VALUES (2, '0', '1', 1441270596, 'default');
