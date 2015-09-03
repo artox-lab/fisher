@@ -31,4 +31,4 @@ INSERT INTO `re_place` VALUES (2, '0', '1', 1441270596, 'default');
 INSERT INTO `re_place` VALUES (3, '0', '1', 1441270596, 'default');
 
 INSERT INTO `re_account_roles_places` VALUES (1, 13, 1);
-INSERT INTO `re_account_roles_places` VALUES (1, 13, 2);
+INSERT INTO `re_account_roles_places` VALUES (2, 13, 2);
