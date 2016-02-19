@@ -142,10 +142,10 @@ INSERT INTO `re_account_rule` VALUES (393, 'Уведомлять о новых �
 INSERT INTO `re_account_rule` VALUES (403, 'Уведомлять о новых отзывах на модерации', 'admin/catalog/reviews/sendReviewModeration', 3, 2);
 INSERT INTO `re_account_rule` VALUES (413, 'Уведомлять об изменениях на ПС', 'admin/catalog/places/sendpersonalchanges', 3, 3);
 
-INSERT INTO `re_account_roles_rules` VALUES (78233, 13, 363, 'deny');
+INSERT INTO `re_account_roles_rules` VALUES (78233, 13, 363, 'allow');
 INSERT INTO `re_account_roles_rules` VALUES (78243, 17943, 273, 'allow');
 INSERT INTO `re_account_roles_rules` VALUES (78253, 17943, 283, 'allow');
-INSERT INTO `re_account_roles_rules` VALUES (78263, 17943, 363, 'allow');
+INSERT INTO `re_account_roles_rules` VALUES (78263, 17943, 363, 'deny');
 INSERT INTO `re_account_roles_rules` VALUES (78273, 17943, 373, 'allow');
 INSERT INTO `re_account_roles_rules` VALUES (84583, 17943, 393, 'deny');
 INSERT INTO `re_account_roles_rules` VALUES (84593, 17943, 403, 'deny');
