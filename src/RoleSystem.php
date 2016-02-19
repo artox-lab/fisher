@@ -117,7 +117,8 @@ class RoleSystem
 
             foreach ($paramsQuery as $key => $param)
             {
-                $select->bindParam($param, (intval($rolesIds[$key])), \PDO::PARAM_INT);
+                $roleVal = intval($rolesIds[$key]);
+                $select->bindParam($param, $roleVal, \PDO::PARAM_INT);
             }
 
             $deny = self::TYPE_DENY;
