@@ -159,7 +159,9 @@ class RoleSystem
 
         $select = $this->pdo->prepare($sql);
 
-        $select->bindParam(':userId', (intval($userId)), \PDO::PARAM_INT);
+        $userVal = intval($userId);
+
+        $select->bindParam(':userId', $userVal, \PDO::PARAM_INT);
         $select->execute();
 
         $roles = $select->fetchAll(\PDO::FETCH_ASSOC);
@@ -194,7 +196,8 @@ class RoleSystem
 
             foreach ($paramsQuery as $key => $param)
             {
-                $select->bindParam($param, (intval($rolesWithParentRoleIds[$key])), \PDO::PARAM_INT);
+                $val = intval($rolesWithParentRoleIds[$key]);
+                $select->bindParam($param, $val, \PDO::PARAM_INT);
             }
             $select->execute();
             $parentRoles = $select->fetchAll(\PDO::FETCH_ASSOC);
@@ -237,9 +240,12 @@ class RoleSystem
                     WHERE ur.user_id = :userId
                     AND rp.place_id = :placeId";
 
+            $userVal = intval($userId);
+            $placeVal = intval($placeId);
+
             $select = $this->pdo->prepare($sql);
-            $select->bindParam(':userId', (intval($userId)), \PDO::PARAM_INT);
-            $select->bindParam(':placeId', (intval($placeId)), \PDO::PARAM_INT);
+            $select->bindParam(':userId', $userVal, \PDO::PARAM_INT);
+            $select->bindParam(':placeId', $placeVal, \PDO::PARAM_INT);
             $select->execute();
 
             $result = $select->fetchColumn();
