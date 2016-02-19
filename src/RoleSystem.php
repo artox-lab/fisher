@@ -203,8 +203,10 @@ class RoleSystem
             $select->execute();
             $parentRoles = $select->fetchAll(\PDO::FETCH_ASSOC);
         }
+        
+        $mergeRoles = array_merge($roles, $parentRoles);
 
-        return array_merge($roles, $parentRoles);
+        return array_intersect_key($mergeRoles, array_unique(array_column($mergeRoles, 'id')));
     }
 
     public function checkAccessToAllPlaces($userId)
